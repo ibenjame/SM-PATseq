@@ -53,6 +53,10 @@ Index   ID
 94      MUT_mRNA_3
 ```
 
+* Locate or obtain your transcriptome fasta (ideally these should contain UTR sequence and not be just coding).  Edit config.yaml to reflect the path and filename of your transcriptome fasta file.
+
+* Adjust any other config.yaml settings as necessary.  Ideally you should be using a transcriptome from either GENCODE or Ensembl.  Downstream reporting scripts may not parse other gene name inputs properly and may beed to be adjusted to your specific source format.
+
 * Check the job plan with a snakemake dry run
 ```
 snakemake -n
