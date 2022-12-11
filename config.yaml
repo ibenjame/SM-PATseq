@@ -1,0 +1,8 @@
+#Path to transcriptome fasta
+transcripts: "Saccharomyces_cerevisiae.R64-1-1.cdna.all.fa"
+#Transcriptome fasta label type
+GENCODE_or_ENSEMBL: "GENCODE"
+#Adapter sequence abutting tail
+forward_adapter: "CTCTGCGTTGATACCACTGCTT"
+reverse_adapter: "AAGCAGTGGTATCAACGCAGAG"
+
