@@ -40,7 +40,8 @@ for root, dirs, files in os.walk(".", followlinks=True):
 
 #Simplified variable names from config
 transcripts=config["transcripts"]
-
+#Get working directory
+workingdir=os.getcwd()
 
 rule targets:
     input:
@@ -67,7 +68,7 @@ rule lima:
     output:
         report="PacBio{r}/{cell}/split.lima.report"
     threads: 8
-    params: detail="scripts/report_detail.R"
+    params: detail=workingdir+"/scripts/report_detail.R"
     shell:
         "lima --peek-guess --split-bam-named -s -j {threads} {input.ccs} {input.bcs} PacBio{wildcards.r}/{wildcards.cell}/split.bam;"
         "cd PacBio{wildcards.r}/{wildcards.cell}; Rscript --vanilla {params.detail} split.lima.report pdf"
