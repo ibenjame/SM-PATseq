@@ -46,7 +46,7 @@ workingdir=os.getcwd()
 rule targets:
     input:
         expand('{folder}/ccs.bam', folder=folders),
-        expand('{folder}/split.lima.report', folder=folders),
+        expand('{folder}/split.lima.summary', folder=folders),
         expand('merged_bams/{sample}.merged.ccs.bam', sample=sampleids.keys()),
         expand('reads/{sample}.fa.gz', sample=sampleids.keys()),
         expand('{sample}/{sample}.report.txt', sample=sampleids.keys()),
@@ -66,17 +66,17 @@ rule lima:
         ccs="PacBio{r}/{cell}/ccs.bam",
         bcs="scripts/barcodes.master.fasta"
     output:
-        report="PacBio{r}/{cell}/split.lima.report"
+        report="PacBio{r}/{cell}/split.lima.summary"
     threads: 8
     params: detail=workingdir+"/scripts/report_detail.R"
     shell:
         "lima --peek-guess --split-bam-named -s -j {threads} {input.ccs} {input.bcs} PacBio{wildcards.r}/{wildcards.cell}/split.bam;"
-        "cd PacBio{wildcards.r}/{wildcards.cell}; Rscript --vanilla {params.detail} split.lima.report pdf"
+#        "cd PacBio{wildcards.r}/{wildcards.cell}; Rscript --vanilla {params.detail} split.lima.report pdf"
 
 #Samtools merge the barcode split files by whitelist
 rule combine:
     input:
-        expand('{folder}/split.lima.report', folder=folders)
+        expand('{folder}/split.lima.summary', folder=folders)
     output:
         "merged_bams/{id}.merged.ccs.bam"
     threads: 8
