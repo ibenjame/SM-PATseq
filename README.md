@@ -17,9 +17,13 @@ A simple Snakemake file using a conda environment built from requirements.txt an
 git clone https://github.com/ibenjame/PATseq
 cd PATseq
 ```
-* Create the conda environment for PATseq analysis using the provided requirements file:
+* Install Mamba to your base conda environment if not already present
 ```
-conda create --name PATseq --file requirements.txt
+conda install mamba -n base -c conda-forge
+```
+* Create the conda environment for PATseq analysis using the provided env.yaml file using the mamba solver
+```
+mamba env create --name PATseq --file env.yaml
 ```
 * Load the environment
 ```
