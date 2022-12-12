@@ -72,6 +72,33 @@ snakemake -n
 
 * After seeing a job plan without errors, submit the snakemake job.  If on a job scheduler such as slurm on a cluster, use a wrapper for submitting the and distriubting the jobs appropriately.
 
+### Outputs
+
+* Several folders will be created and populated during the process
+  * Folder "merged_bams" will contain individual sample CCS bam files combining all flowcells in the experiment into one.  These are named based on the samples.txt file designations provided of the form {name}.merged.ccs.bam
+  * Folder "reads" will contain gzipped fastq and fasta format read files for each sample of the form {name}.fastq.gz and {name}.fa.gz
+  * Each sample should have an output folder by name containing several files:
+    * A sorted and indexed bam file of minimap2 alignments of the form {name}.mm2.bam and {name}.mm2.bam.bai
+    * A log file len.{name}.log summarizing overall tail finding stats
+    * A report summary containing overall stats related to both tail and gene assignment rates {name}.report.summary
+    * A tab-delimited report text file for the sample containing gene-level poly-A tail statistics {name}.report.txt
+    * A length assignment zip file containing only tail identification stats per read {name}.lengths.txt.gz
+    * A full tab-delimited zipped report file with per-read tail and gene assignment {name}.full.txt.gz
+
+* The sample table {name}.full.txt.gz is a headerless tab-delimited text file with the following fields:
+  1. ReadID – string from the sequencing/ccs generation
+  2. Length – PAT length determined from the read
+  3. Direction – If CCS read is oriented in forward or reverse compliment direction (random based on initial loop priming)
+  4. C – Number of non-A C bases found in the poly-A tail
+  5. G – Number of non-A G bases found in the poly-A tail
+  6. T – Number of non-A T bases found in the poly-A tail
+  7. TerminalUs – Number of terminal Uridyls found AFTER poly-A tail (and before adapter)
+  8. Gene – Gene symbol designation for the read found by minimap2 alignment
+  9. AlignmentScore – Score for the read alignment to the denoted gene
+  10. GencodeString – (Unused if GENCODE is not selected in the config; for Gencode transcriptome alignments the full assignment string rather than just symbol)
+
+* Note that non-A bases are defined as occuring within the tail as long as they are bracketed by a minimum of 2 A bases on either side.  We make no assumption that these are true biological in origin vs introduced at some point during reverse transcription and amplification, similar to possible terminal Uridiylation reported stats.  These are reported for convenience and potential QC.  Be cautious when making use of these statistics.
+
 ## Authors
 
 James Iben (ibenjame@nih.gov)
