@@ -71,7 +71,8 @@ rule lima:
     params: detail=workingdir+"/scripts/report_detail.R"
     shell:
         "lima --peek-guess --split-bam-named -s -j {threads} {input.ccs} {input.bcs} PacBio{wildcards.r}/{wildcards.cell}/split.bam;"
-#        "cd PacBio{wildcards.r}/{wildcards.cell}; Rscript --vanilla {params.detail} split.lima.report pdf"
+        "mkdir -p PacBio{wildcards.r}/{wildcards.cell}/reports;"
+        "runqc-reports -o PacBio{wildcards.r}/{wildcards.cell}/reports PacBio{wildcards.r}/{wildcards.cell}/split.consensusreadset.xml"
 
 #Samtools merge the barcode split files by whitelist
 rule combine:
