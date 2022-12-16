@@ -18,8 +18,8 @@ sampleids = {}
 with open('samples.txt','r') as f:
     next(f) # skip headings
     reader=csv.reader(f,delimiter='\t')
-    for index,id in reader:
-        sampleids.update({id : index})
+    for row in reader:
+        sampleids.update({row[1] : row[0]})
 
 #Identify runs
 subreads = []
@@ -50,15 +50,17 @@ rule targets:
         expand('merged_bams/{sample}.merged.ccs.bam', sample=sampleids.keys()),
         expand('reads/{sample}.fa.gz', sample=sampleids.keys()),
         expand('{sample}/{sample}.report.txt', sample=sampleids.keys()),
-        expand('{sample}/{sample}.full.txt.gz', sample=sampleids.keys())
+        expand('{sample}/{sample}.full.txt.gz', sample=sampleids.keys()),
+        expand('cell_reports/{folder}/readlength_qv_hist2d.hexbin.png', folder=folders)
 
 #Make CCSes of each cell
 rule ccs:
     output:
-        ccs="PacBio{r}/{cell}/ccs.bam"
+        ccs="PacBio{r}/{cell}/ccs.bam",
+        xml="PacBio{r}/{cell}/ccs.consensusreadset.xml"
     threads: 20
     shell:
-        "ccs -j {threads} --report-file PacBio{wildcards.r}/{wildcards.cell}/ccs_report.txt PacBio{wildcards.r}/{wildcards.cell}/*.subreads.bam {output.ccs}"
+        "ccs -j {threads} --report-file PacBio{wildcards.r}/{wildcards.cell}/ccs_report.txt PacBio{wildcards.r}/{wildcards.cell}/*.subreads.bam {output.xml}"
 
 #Split samples by lima
 rule lima:
@@ -68,11 +70,17 @@ rule lima:
     output:
         report="PacBio{r}/{cell}/split.lima.summary"
     threads: 8
-    params: detail=workingdir+"/scripts/report_detail.R"
     shell:
         "lima --peek-guess --split-bam-named -s -j {threads} {input.ccs} {input.bcs} PacBio{wildcards.r}/{wildcards.cell}/split.bam;"
-        "mkdir -p PacBio{wildcards.r}/{wildcards.cell}/reports;"
-        "runqc-reports -o PacBio{wildcards.r}/{wildcards.cell}/reports PacBio{wildcards.r}/{wildcards.cell}/split.consensusreadset.xml"
+
+#Report Plots
+rule report_plots:
+    input:
+        xml="PacBio{r}/{cell}/ccs.consensusreadset.xml"
+    output:
+        plot="cell_reports/PacBio{r}/{cell}/readlength_qv_hist2d.hexbin.png"
+    shell:
+        "mkdir -p cell_reports/PacBio{wildcards.r}/{wildcards.cell}; runqc-reports -o cell_reports/PacBio{wildcards.r}/{wildcards.cell} {input.xml}"
 
 #Samtools merge the barcode split files by whitelist
 rule combine:
@@ -139,7 +147,7 @@ rule extend:
 #Build sample gene report file
 rule report:
     input:
-        blat="{id}/{id}.mm2.bam",
+        minimap="{id}/{id}.mm2.bam",
         len="{id}/{id}.lengths.txt.gz",
         pl="scripts/minimap2_parse.pl"
     output:
@@ -147,5 +155,5 @@ rule report:
     log: "{id}/{id}.report.summary"
     params: gencode=config["GENCODE_or_ENSEMBL"]
     shell:
-        "perl {input.pl} {input.blat} {input.len} {params.gencode} 2>{log} >{output}"
+        "perl {input.pl} {input.minimap} {input.len} {params.gencode} 2>{log} >{output}"
 
