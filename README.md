@@ -50,15 +50,15 @@ PacBio1
 └── 8_H01
 ```
 
-* Edit a samples.txt file to describe the multiplexed samples in the experiment.  This is in the form of header-containing tab-delimited text similar to below.  Columns should be Index (referring to the barcode index used for the sample; found in scripts/barcodes.master.fasta) and ID (a name for the sample and associated filenames; Do not use any special characters or whitespace)
+* Edit a samples.txt file to describe the multiplexed samples in the experiment.  This is in the form of header-containing tab-delimited text similar to below.  Columns should be Index (referring to the barcode index used for the sample; found in scripts/barcodes.master.fasta) and ID (a name for the sample and associated filenames; Do not use any special characters or whitespace).  Genotype is an optional grouping variable for samples only used in downstream plotting.
 ```
-Index   ID
-89      WT_mRNA_1
-90      WT_mRNA_2
-91      WT_mRNA_3
-92      MUT_mRNA_1
-93      MUT_mRNA_2
-94      MUT_mRNA_3
+Index   ID	Genotype
+89      WT_mRNA_1	WT
+90      WT_mRNA_2	WT
+91      WT_mRNA_3	WT
+92      MUT_mRNA_1	MUT
+93      MUT_mRNA_2	MUT
+94      MUT_mRNA_3	MUT
 ```
 
 * Locate or obtain your transcriptome fasta (ideally these should contain UTR sequence and not be just coding).  Edit config.yaml to reflect the path and filename of your transcriptome fasta file.
