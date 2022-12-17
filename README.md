@@ -99,6 +99,11 @@ snakemake -n
 
 * Note that non-A bases are defined as occuring within the tail as long as they are bracketed by a minimum of 2 A bases on either side.  We make no assumption that these are true biological in origin vs introduced at some point during reverse transcription and amplification, similar to possible terminal Uridiylation reported stats.  These are reported for convenience and potential QC.  Be cautious when making use of these statistics.
 
+* An example R script producing some plots from the data based on sample table definitions is provided in scripts/plot_examples.R which also serves as an example for handling of the data tables.  To execute this, after the workflow completes run:
+```
+Rscript scripts/plot_examples.R
+```
+
 ## Authors
 
 James Iben (ibenjame@nih.gov)
