@@ -2,7 +2,7 @@
 #Provides an extended per-read tabular report file
 use strict;
 
-my $gencode = @ARGV[3];
+my $gencode = $ARGV[2];
 
 my %h;
 my ($tot, $c);
@@ -15,6 +15,7 @@ while(<FILE>) {
     my @arr = split(/\t/,$line);
     next unless ($line =~ /tp:A:P/);
 
+    $h{$arr[0]}{"full"}=$arr[2];
     if($gencode eq "GENCODE"){
 #Gencode
         my @v = split(/\|/,$arr[2]);

@@ -5,7 +5,7 @@ use strict;
 my %h;
 my ($tot, $c);
 
-my $gencode = $ARGV[3];
+my $gencode = $ARGV[2];
 
 #A-length scan file
 open(FILE,"zcat $ARGV[1] |");
