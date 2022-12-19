@@ -1,7 +1,7 @@
-Index	ID
-1	WT_1
-2	WT_2
-3	WT_3
-4	MUT_1
-5	MUT_2
-6	MUT_3
+Index	ID	Genotype
+1	WT_1	WT
+2	WT_2	WT
+3	WT_3	WT
+4	MUT_1	MUT
+5	MUT_2	MUT
+6	MUT_3	MUT
