@@ -1,4 +1,4 @@
-# Poly-A tail Sequencing (PATseq) Snakemake example workflow for working with PacBio Sequel subread data to analysis ready report files
+# Single-Molecule Poly-A tail Sequencing (SM-PATseq) Snakemake example workflow for working with PacBio Sequel subread data to analysis ready report files
 
 ## Description
 
